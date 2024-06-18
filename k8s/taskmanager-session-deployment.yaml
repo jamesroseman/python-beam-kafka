@@ -17,16 +17,22 @@ spec:
       initContainers:
       - name: init-taskmanager
         image: apache/flink:1.16.0
-        command: [ 'sh', '-c', 'mkdir -p /beam-java-files/apache/beam_java' ]
+        command: [ 'sh', '-c', 'mkdir -p /beam-files/beam_java && mkdir -p /beam-files/beam' ]
         volumeMounts:
-          - name: beam-java-files
-            mountPath: /beam-java-files
+          - name: beam-files
+            mountPath: /beam-files
       - name: init-beam-java
         image: apache/beam_java8_sdk:2.41.0
-        command: [ 'sh', '-c', 'cp -r /opt/apache/beam/* /beam-java-files/apache/beam_java/' ]
+        command: [ 'sh', '-c', 'cp -r /opt/apache/beam/* /beam-files/beam_java/' ]
         volumeMounts:
-          - name: beam-java-files
-            mountPath: /beam-java-files
+          - name: beam-files
+            mountPath: /beam-files
+      - name: init-beam-python
+        image: apache/beam_python3.10_sdk
+        command: [ 'sh', '-c', 'cp -r /opt/apache/beam/* /beam-files/beam/' ]
+        volumeMounts:
+          - name: beam-files
+            mountPath: /beam-files
       containers:
       - name: taskmanager
         image: apache/flink:1.16.0
@@ -42,12 +48,12 @@ spec:
           initialDelaySeconds: 30
           periodSeconds: 60
         volumeMounts:
+        - name: beam-files
+          mountPath: /opt/apache
         - name: flink-config-volume
           mountPath: /opt/flink/conf
         - name: flink-writable-config-volume
           mountPath: /opt/flink/conf/writable
-        - name: beam-java-files
-          mountPath: /opt/apache
         securityContext:
           runAsUser: 9999  # refers to user _flink_ from official flink image, change if necessary
       - name: beam-worker-pool
@@ -62,8 +68,12 @@ spec:
           initialDelaySeconds: 30
           periodSeconds: 60
         volumeMounts:
-          - name: beam-java-files
+          - name: beam-files
             mountPath: /opt/apache
+          - name: flink-config-volume
+            mountPath: /opt/flink/conf
+          - name: flink-writable-config-volume
+            mountPath: /opt/flink/conf/writable
       volumes:
       - name: flink-config-volume
         configMap:
@@ -73,7 +83,7 @@ spec:
             path: flink-conf.yaml
           - key: log4j-console.properties
             path: log4j-console.properties
-      - name: flink-writable-config-volume
+      - name: beam-files
         emptyDir: { }
-      - name: beam-java-files
+      - name: flink-writable-config-volume
         emptyDir: { }
