@@ -41,6 +41,7 @@ def run():
         f"--setup_file={posixpath.join(working_path, 'setup.py')}",
         "--flink_submit_uber_jar",
         "--streaming",
+        "--staging_location=s3://beam-artifacts/"
     ])
 
     kafka_config = {

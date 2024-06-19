@@ -15,6 +15,10 @@ data:
     jobmanager.memory.process.size: 1024m
     taskmanager.memory.process.size: 1024m
     parallelism.default: 2
+    s3.endpoint: http://minio:9000
+    s3.path.style.access: true
+    s3.access-key: minio-access-key
+    s3.secret-key: minio-secret-key
   log4j-console.properties: |+
     # This affects logging for both user code and Flink
     rootLogger.level = INFO
