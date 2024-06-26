@@ -54,6 +54,8 @@ spec:
           mountPath: /opt/flink/conf
         - name: flink-writable-config-volume
           mountPath: /opt/flink/conf/writable
+        - name: hadoop-config-volume
+          mountPath: /etc/hadoop/conf
         securityContext:
           runAsUser: 9999  # refers to user _flink_ from official flink image, change if necessary
         env:
@@ -81,6 +83,8 @@ spec:
             mountPath: /opt/flink/conf
           - name: flink-writable-config-volume
             mountPath: /opt/flink/conf/writable
+          - name: hadoop-config-volume
+            mountPath: /etc/hadoop/conf
         env:
           - name: AWS_ACCESS_KEY
             value: minioadmin
@@ -101,3 +105,9 @@ spec:
         emptyDir: { }
       - name: flink-writable-config-volume
         emptyDir: { }
+      - name: hadoop-config-volume
+        configMap:
+          name: flink-config
+          items:
+            - key: core-site.xml
+              path: core-site.xml

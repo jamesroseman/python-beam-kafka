@@ -1,0 +1,3 @@
+[build-system]
+requires = ["setuptools", "wheel", "boto3", "setuptools_scm", "custom_build_backend"]
+build-backend = "custom_build_backend"

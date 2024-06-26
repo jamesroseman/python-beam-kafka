@@ -10,14 +10,16 @@ def run():
     working_path = os.path.dirname(__file__)
 
     # Set environment variables.
-    os.environ["AWS_ACCESS_KEY"] = "minioadmin"
-    os.environ["AWS_SECRET_ACCESS_KEY"] = "minioadmin"
-    os.environ["AWS_REGION"] = "us-east-1"
-    os.environ["S3_ENDPOINT"] = "http://localhost:9000"
+    # os.environ["AWS_ACCESS_KEY"] = "minioadmin"
+    # os.environ["AWS_SECRET_ACCESS_KEY"] = "minioadmin"
+    # os.environ["AWS_REGION"] = "us-east-1"
+    # os.environ["S3_ENDPOINT"] = "http://localhost:9000"
+    # os.environ["S3_ENDPOINT"] = "http://minio-service.minio.svc.cluster.local:9000"
 
     options = PipelineOptions([
         # "--runner=DirectRunner",
         # "--environment_type=LOOPBACK",
+        # "--s3_endpoint=http://localhost:9000"
         "--runner=FlinkRunner",
         "--flink_version=1.16",
         "--flink_master=localhost:8081",
@@ -28,7 +30,7 @@ def run():
         "--s3_region_name=us-east-1",
         "--s3_access_key_id=minioadmin",
         "--s3_secret_access_key=minioadmin",
-        "--s3_endpoint=http://localhost:9000"
+        "--s3_endpoint=http://minio-service.minio.svc.cluster.local:9000"
     ])
 
     with beam.Pipeline(options=options) as p:

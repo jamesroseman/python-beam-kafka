@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: kafka-service
+  namespace: apache-kafka
+spec:
+  selector:
+    app: apache-kafka
+  ports:
+    - name: internal
+      protocol: TCP
+      port: 9092
+      targetPort: 9092
+    - name: external
+      protocol: TCP
+      port: 9094
+      targetPort: 9094
+  type: NodePort
