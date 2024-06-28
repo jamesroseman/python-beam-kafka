@@ -1,32 +1,12 @@
 # python-beam-kafka
-A boilerplate project for running Kafka-consuming Python Beam pipelines on Flink Runners over Kubernetes
+A working example of Python Beam pipelines running on a Flink runner hosted in Kubernetes!
+
+
+## Reference
+
+https://beam.apache.org/blog/deploy-python-pipeline-on-flink-runner/#resources-to-run-a-python-beam-pipeline-on-flink
 
 
 ## How to Run
 
-Assuming you have `minikube` and `kubectl` and `docker` and `python` installed...
-
-
-```
-# Start the kubernetes services
-minikube start
-kubectl apply -f k8s/
-
-# Forward 8081 to see the JobManager Web UI
-kubectl port-forward $(kubectl get pods --no-headers -o custom-columns=":metadata.name" | grep jobmanager | head -n 1) 8081:8081
-
-# Forward 9001 to see the Minio Web UI
-kubectl -n minio port-forward $(kubectl get pods -n minio --no-headers -o custom-columns=":metadata.name" | grep minio | head -n 1) 9001:9001
-
-# Forward 9094 to access Kafka
-kubectl -n apache-kafka port-forward $(kubectl get pods -n apache-kafka --no-headers -o custom-columns=":metadata.name" | grep minio | head -n 1) 9094:9094
-
-# Run the simple non-Kafka pipeline
-python test-beam/simple-beam.py
-
-# You should see the job submitted, run, and successfully exited.
-
-# Run the simple Kafka pipeline
-python test-beam/simple-kafka-beam.py
-
-# This breaks, seemingly because the TaskManager is looking in /tmp/ for the packaged artifacts.
+Just follow the scripts in order! You may need to delete your local minikube, if you have it running.
